@@ -26,17 +26,20 @@ class Product(models.Model):
     slug = models.SlugField(_('slug'))
     detail = models.TextField(_('detail'))
     image = models.ImageField(_('image'),upload_to='/product/image/')
-    brand = models.ForeignKey(Brand)
+    brand = models.ForeignKey(Brand,related_name='Product', related_query_name='Product', verbose_name=_(
+        "brand"), on_delete=models.CASCADE))
     category = models.ForeignKey(Category, related_name='products', verbose_name=_(
         "Category"), on_delete=models.SET_NULL, null=True, blank=True)
 
 class ProductMeta(models.Model):
-    product= models.ForeignKey(Product)
+    product= models.ForeignKey(Product,related_name='ProductMeta', related_query_name='ProductMeta',
+     verbose_name=_("Product"), on_delete=models.CASCADE)
     label = models.CharField(_('label'),max_length=50)
     value = models.IntegerField(_('value'))
 
 class Image(models.Model):
-    product= models.ForeignKey(Product)
+    product= models.ForeignKey(Product,related_name='Images', related_query_name='Images', verbose_name=_(
+        "Product"), on_delete=models.CASCADE))
     image = models.ImageField(_('image'),upload_to='/image/image/')
 
 class Comment(models.Model):
