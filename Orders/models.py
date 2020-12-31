@@ -13,6 +13,13 @@ class Order(models.Model):
     update_at = models.DateTimeField(_("Update at"), auto_now=True)
     discription = models.TextField(_('discription'))
 
+    class Meta:
+        verbose_name = _('Order')
+        verbose_name_plural = _('Orders')
+
+    def __str__(self) :
+        return self.user.mobile
+
 
 class Payment(models.Model):
 
@@ -24,15 +31,25 @@ class Payment(models.Model):
 
     amount = models.IntegerField(_('amount'))
 
+    class Meta:
+        verbose_name = _('Payment')
+        verbose_name_plural = _('Payments')
+
+    def __str__(self) :
+        return self.name
+
 class Basket(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL,related_name='baskets', related_query_name='baskets', verbose_name=_(
     "user"), on_delete=models.CASCADE)
+    
+    def __str__(self) :
+        return self.user.mobile
 
 class BasketItem(models.Model):
     basket = models.ForeignKey(Basket,related_name='itemsbasket', related_query_name='itemsbasket', verbose_name=_(
     "basket"), on_delete=models.CASCADE)
     shop_product = models.ForeignKey(ShopProduct,related_name='itemsshop_product', related_query_name='itemsshop_product', verbose_name=_(
-    "shop_product"), on_delete=models.CASCADE)
+        "shop_product"), on_delete=models.CASCADE)
 
 class OrderShopProduct(models.Model):
     order = models.ForeignKey(Order,related_name='Orderorder', related_query_name='Orderorder', verbose_name=_(

@@ -73,14 +73,24 @@ class UserEmail(models.Model):
     subject = models.CharField(_('subject'),max_length=60 )
     body = models.TextField(_('body'))
     
-
+    class Meta:
+        verbose_name = _('email')
+        verbose_name_plural = _('emails')
+    
+    def __str__(self) :
+        return self.subject
 class Address(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     city = models.CharField(_('city'),max_length=60)
     street = models.CharField(_('street'),max_length=160)
     alley = models.CharField(_('alley'),max_length=160)
     zip_code = models.CharField(_('zip_code'),max_length=160)
-
+    class Meta:
+        verbose_name = _('Address')
+        verbose_name_plural = _('Addresses')
+    
+    def __str__(self) :
+        return self.city + self.street
 
 class Shop(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
@@ -88,3 +98,9 @@ class Shop(models.Model):
     slug = models.SlugField(_('slug'),)
     description = models.CharField(_('description'),max_length=260)
     image = models.ImageField(verbose_name=_('image'),upload_to='Accounts/Shop/image')
+    class Meta:
+        verbose_name = _('Shop')
+        verbose_name_plural = _('Shopes')
+
+    def __str__(self) :
+        return self.name
