@@ -38,8 +38,8 @@ class User(AbstractBaseUser,PermissionsMixin):
     last_name = models.CharField(_('last name'),max_length=90)
     passsword = models.CharField(_('password'), max_length=150)
     email = models.EmailField(_('email address'),unique=True,db_index=True)
-    mobile = models.CharField(_('mobile'),)
-    avatar = models.CharField(_('avatar'),upload_to='/user/image/')
+    mobile = models.CharField(_('mobile'),max_length=12)
+    avatar = models.ImageField(_('avatar'),upload_to='Accounts/User/image')
     is_staff = models.BooleanField(
         _('staff status'),
         default=False,
@@ -56,7 +56,7 @@ class User(AbstractBaseUser,PermissionsMixin):
     date_joined = models.DateTimeField(_("date joined"),default=timezone.now)
     EMAIL_FIELD = 'email'
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['mobile','passsword']
+    REQUIRED_FIELDS = ['mobile']
     objects = UserManager()
 
 
@@ -70,7 +70,7 @@ class User(AbstractBaseUser,PermissionsMixin):
 
 class UserEmail(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
-    subject = models.CharField(_('subject') )
+    subject = models.CharField(_('subject'),max_length=60 )
     body = models.TextField(_('body'))
     
 
@@ -87,4 +87,4 @@ class Shop(models.Model):
     name = models.CharField(_('name'),max_length=60)
     slug = models.SlugField(_('slug'),)
     description = models.CharField(_('description'),max_length=260)
-    image = models.ImageField(verbose_name=_('image'),upload_to='/shop/image/')
+    image = models.ImageField(verbose_name=_('image'),upload_to='Accounts/Shop/image')

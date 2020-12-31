@@ -1,16 +1,16 @@
 from django.db import models
+from django.db.models.base import Model
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth import get_user_model
+from django.conf import  settings
 from Accounts.models import Shop
 # Create your models here.
 
-User = get_user_model()
 
 class Category(models.Model):
     name = models.CharField(_('name'),max_length=50)
     slug = models.SlugField(_('slug'))
     detail = models.TextField(_('detail'))
-    image = models.ImageField(_('image'),upload_to='/category/image/')
+    image = models.ImageField(_('image'),upload_to='Product/Category/image')
     parent = models.ForeignKey(
         'self', verbose_name=_("Parent"), on_delete=models.SET_NULL, null=True, blank=True,
         related_name='children', related_query_name='children')
@@ -19,13 +19,13 @@ class Category(models.Model):
 class Brand(models.Model):
     name = models.CharField(_('name'),max_length=50)
     detail = models.TextField(_('detail'))
-    image = models.ImageField(_('image'),upload_to='/brand/image/')
+    image = models.ImageField(_('image'),upload_to='Product/Brand/image')
 
 class Product(models.Model):
     name = models.CharField(_('name'),max_length=50)
     slug = models.SlugField(_('slug'))
     detail = models.TextField(_('detail'))
-    image = models.ImageField(_('image'),upload_to='/product/image/')
+    image = models.ImageField(_('image'),upload_to='Product/Product/image')
     brand = models.ForeignKey(Brand,related_name='Product', related_query_name='Product', verbose_name=_(
         "brand"), on_delete=models.CASCADE)
     category = models.ForeignKey(Category, related_name='products', verbose_name=_(
@@ -40,7 +40,7 @@ class ProductMeta(models.Model):
 class Image(models.Model):
     product= models.ForeignKey(Product,related_name='Images', related_query_name='Images', verbose_name=_(
         "Product"), on_delete=models.CASCADE)
-    image = models.ImageField(_('image'),upload_to='/image/image/')
+    image = models.ImageField(_('image'),upload_to='Product/Image/image')
 
 class Comment(models.Model):
     content = models.TextField(_("Content"))
@@ -48,7 +48,7 @@ class Comment(models.Model):
         "Product"), on_delete=models.CASCADE)
     create_at = models.DateTimeField(_("Create at"), auto_now_add=True)
     update_at = models.DateTimeField(_("Update at"), auto_now=True)
-    author = models.ForeignKey(User, verbose_name=_(
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_(
         "Author"), on_delete=models.CASCADE)
     is_confirmed = models.BooleanField(_("confirm"), default=True)
 
@@ -64,3 +64,12 @@ class ShopProduct(models.Model):
         "ShopProduct"), on_delete=models.CASCADE)
     price = models.FloatField(_('price'))
     quantity = models.IntegerField(_('quantity'))
+
+
+class like(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,related_name='userlikes', related_query_name='userlikes', verbose_name=_(
+        "user"), on_delete=models.SET_NULL,null=True)
+
+    product = models.ForeignKey(Product,related_name='Productlikes', related_query_name='Productlikes', verbose_name=_(
+        "product"), on_delete=models.CASCADE)
+
