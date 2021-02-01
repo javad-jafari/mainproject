@@ -1,14 +1,16 @@
-from django.contrib.auth.base_user import BaseUserManager,AbstractBaseUser
+from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.db import models
 from django.core.mail import send_mail
 from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.utils import timezone
+
+
 # Create your models here.
 
 class UserManager(BaseUserManager):
-    
+
     def _create_user(self, email, password, **extra_fields):
         """
         Create and save a user with the given username, email, and password.
@@ -33,13 +35,13 @@ class UserManager(BaseUserManager):
         return self._create_user(email, password, **extra_fields)
 
 
-class User(AbstractBaseUser,PermissionsMixin):
-    first_name = models.CharField(_('first name'),max_length=90)
-    last_name = models.CharField(_('last name'),max_length=90)
+class User(AbstractBaseUser, PermissionsMixin):
+    first_name = models.CharField(_('first name'), max_length=90)
+    last_name = models.CharField(_('last name'), max_length=90)
     passsword = models.CharField(_('password'), max_length=150)
-    email = models.EmailField(_('email address'),unique=True,db_index=True)
-    mobile = models.CharField(_('mobile'),max_length=12)
-    avatar = models.ImageField(_('avatar'),upload_to='Accounts/User/image')
+    email = models.EmailField(_('email address'), unique=True, db_index=True)
+    mobile = models.CharField(_('mobile'), max_length=12)
+    avatar = models.ImageField(_('avatar'), upload_to='Accounts/User/image')
     is_staff = models.BooleanField(
         _('staff status'),
         default=False,
@@ -53,54 +55,55 @@ class User(AbstractBaseUser,PermissionsMixin):
             'Unselect this instead of deleting accounts.'
         ),
     )
-    date_joined = models.DateTimeField(_("date joined"),default=timezone.now)
+    date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
     EMAIL_FIELD = 'email'
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['mobile']
     objects = UserManager()
-
 
     class Meta:
         verbose_name = _('user')
         verbose_name_plural = _('users')
 
 
-    
-
-
 class UserEmail(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
-    subject = models.CharField(_('subject'),max_length=60 )
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    subject = models.CharField(_('subject'), max_length=60)
     body = models.TextField(_('body'))
-    
+
     class Meta:
         verbose_name = _('email')
         verbose_name_plural = _('emails')
-    
-    def __str__(self) :
+
+    def __str__(self):
         return self.subject
+
+
 class Address(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
-    city = models.CharField(_('city'),max_length=60)
-    street = models.CharField(_('street'),max_length=160)
-    alley = models.CharField(_('alley'),max_length=160)
-    zip_code = models.CharField(_('zip_code'),max_length=160)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    city = models.CharField(_('city'), max_length=60)
+    street = models.CharField(_('street'), max_length=160)
+    alley = models.CharField(_('alley'), max_length=160)
+    zip_code = models.CharField(_('zip_code'), max_length=160)
+
     class Meta:
         verbose_name = _('Address')
         verbose_name_plural = _('Addresses')
-    
-    def __str__(self) :
+
+    def __str__(self):
         return self.city + self.street
 
+
 class Shop(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
-    name = models.CharField(_('name'),max_length=60)
-    slug = models.SlugField(_('slug'),)
-    description = models.CharField(_('description'),max_length=260)
-    image = models.ImageField(verbose_name=_('image'),upload_to='Accounts/Shop/image')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(_('name'), max_length=60)
+    slug = models.SlugField(_('slug'), unique=True)
+    description = models.CharField(_('description'), max_length=260)
+    image = models.ImageField(verbose_name=_('image'), upload_to='Accounts/Shop/image')
+
     class Meta:
         verbose_name = _('Shop')
         verbose_name_plural = _('Shopes')
 
-    def __str__(self) :
+    def __str__(self):
         return self.name

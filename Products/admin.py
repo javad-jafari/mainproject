@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Product,ShopProduct, Category, Comment,Brand,ProductMeta,like
+from .models import Product, ShopProduct, Category, Comment, Brand, ProductMeta, like
 
 
 # Register your models here.
@@ -14,6 +14,16 @@ class ChildrenItemInline(admin.TabularInline):
     extra = 1
     show_change_link = True
 
+
+class ProductItemInline(admin.TabularInline):
+    model = ProductMeta
+    fields = (
+        'value', 'product', 'label'
+    )
+    extra = 1
+    show_change_link = True
+
+
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('slug', 'name', 'parent')
@@ -26,9 +36,10 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(ShopProduct)
 class ShopProduct(admin.ModelAdmin):
-    list_display = ('shop', 'product', 'price' , 'quantity')
+    list_display = ('shop', 'product', 'price', 'quantity')
     search_fields = ('shop', 'product')
     list_filter = ('shop',)
+
 
 @admin.register(Brand)
 class Brand(admin.ModelAdmin):
@@ -42,14 +53,16 @@ class ProductMeta(admin.ModelAdmin):
     list_display = ('product', 'value', 'label')
     search_fields = ('product', 'label')
     list_filter = ('product',)
- 
+
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name','brand', 'category', )
+    list_display = ('name', 'brand', 'category',)
     search_fields = ('name',)
     list_filter = ('brand', 'category', 'name')
-
+    inlines = [
+        ProductItemInline,
+    ]
 
 
 @admin.register(Comment)
@@ -59,10 +72,9 @@ class CommentAdmin(admin.ModelAdmin):
     list_filter = ('is_confirmed',)
     date_hierarchy = 'create_at'
 
+
 @admin.register(like)
 class likeAdmin(admin.ModelAdmin):
     list_display = ('product', 'user')
     search_fields = ('product',)
     list_filter = ('product',)
-
-
