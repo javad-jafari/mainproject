@@ -31,15 +31,6 @@
                         </div>
 
 
-
-
-
-
-
-
-
-
-
                         <div class="filter-sidebar-left">
                             <div class="title-left">
                                 <h3>Categories</h3>
@@ -47,48 +38,28 @@
                             <div class="list-group list-group-collapse list-group-sm list-group-tree"
                                  id="list-group-men">
 
+                                {% for cat in categories %}
+                                <div class="dropright">
+                                {% if cat.parent == None %}
+                                    
+                                    <a href="{{ cat.get_absolute_url }}" class="dropdown-toggle"  id="dropdownMenu2" data-toggle="dropdown"
+                                       aria-haspopup="true" aria-expanded="false">
+                                        {{ cat.name }}
+                                    </a>
+                                    {% endif %}
 
-
-                                {% for c in categories %}
-                                    <div class="list-group-collapse">
-                                        {% if c.parent == None %}
-                                            <a class="list-group-item list-group-item-action"
-                                               href="{{ c.get_absolute_url }}"
-                                               data-toggle="collapse" aria-expanded="false">
-                                                {{ c.name }}
-                                            </a>
-                                        {% endif %}
-
-                                        <div class="collapse show" data-parent="#list-group-men">
-
-                                            <div class="list-group">
-                                                {% for c1 in categories %}
-                                                    {% if c == c1.parent %}
-                                                        <a href="#" class="list-group-item list-group-item-action">
-                                                            {{ c1.name }}</a>
-                                                    {% endif %}
-                                                {% endfor %}
-
-                                            </div>
-
-
-                                        </div>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                        {% for incat in categories %}
+                                            {% if incat.parent == cat %}
+                                        <a href="{{ incat.get_absolute_url }}" class="dropdown-item" >{{ incat.name }}</a>
+                                            {% endif %}
+                                            {% endfor %}
                                     </div>
+                                </div>
                                 {% endfor %}
-
-
 
                             </div>
                         </div>
-
-
-
-
-
-
-
-
-
 
 
                         <div class="filter-brand-left">
@@ -110,8 +81,6 @@
                                 </ul>
                             </div>
                         </div>
-
-
 
 
                     </div>
@@ -160,17 +129,11 @@
                                                         <div class="type-lb">
                                                             <p class="sale">Sale</p>
                                                         </div>
-                                                        <img src="{{ cat.product.image.url }}" class="img-fluid" alt="Image">
+                                                        <img src="{{ cat.product.image.url }}" class="img-fluid"
+                                                             alt="Image">
                                                         <div class="mask-icon">
                                                             <ul>
-                                                                <li><a href="#" data-toggle="tooltip"
-                                                                       data-placement="right"
-                                                                       title="View"><i class="fas fa-eye"></i></a></li>
-                                                                <li><a href="#" data-toggle="tooltip"
-                                                                       data-placement="right"
-                                                                       title="Compare"><i
-                                                                        class="fas fa-sync-alt"></i></a>
-                                                                </li>
+
                                                                 <li><a href="#" data-toggle="tooltip"
                                                                        data-placement="right"
                                                                        title="Add to Wishlist"><i
@@ -181,7 +144,8 @@
                                                         </div>
                                                     </div>
                                                     <div class="why-text">
-                                                        <a href="{{ cat.product.get_absolute_url }}"><h4>{{ cat.product.name }}</h4></a>
+                                                        <a href="{{ cat.product.get_absolute_url }}">
+                                                            <h4>{{ cat.product.name }}</h4></a>
                                                         <h5> {{ cat.price }}</h5>
                                                     </div>
                                                 </div>

@@ -11,7 +11,7 @@ from django.urls import reverse
 
 class Category(models.Model):
     name = models.CharField(_('name'), max_length=50)
-    slug = models.SlugField(_('slug'),unique=True)
+    slug = models.SlugField(_('slug'), unique=True)
     detail = models.TextField(_('detail'))
     image = models.ImageField(_('image'), upload_to='Product/Category/image')
     parent = models.ForeignKey(
@@ -44,7 +44,7 @@ class Brand(models.Model):
 
 class Product(models.Model):
     name = models.CharField(_('name'), max_length=50)
-    slug = models.SlugField(_('slug'),unique=True)
+    slug = models.SlugField(_('slug'), unique=True)
     detail = models.TextField(_('detail'))
     image = models.ImageField(_('image'), upload_to='Product/Product/image')
     brand = models.ForeignKey(Brand, related_name='Product', related_query_name='Product', verbose_name=_(
@@ -117,6 +117,7 @@ class ShopProduct(models.Model):
     class Meta:
         verbose_name = _('ShopProduct')
         verbose_name_plural = _('ShopProducts')
+        unique_together = [('shop', 'product')]
 
     def __str__(self):
         return self.shop.name
