@@ -123,6 +123,7 @@ class ShopProduct(models.Model):
         return self.shop.name
 
 
+
 class like(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='userlikes', related_query_name='userlikes',
                              verbose_name=_(

@@ -2,6 +2,7 @@ from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.db import models
 from django.core.mail import send_mail
 from django.contrib.auth.models import AbstractUser, PermissionsMixin
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.utils import timezone
@@ -107,3 +108,6 @@ class Shop(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('shop_detail', kwargs={'shop_slug': self.slug})
