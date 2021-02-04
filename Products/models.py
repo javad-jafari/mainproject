@@ -1,3 +1,4 @@
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.db.models.base import Model
 from django.utils.translation import ugettext_lazy as _
@@ -51,6 +52,7 @@ class Product(models.Model):
         "brand"), on_delete=models.CASCADE)
     category = models.ForeignKey(Category, related_name='products', verbose_name=_(
         "Category"), on_delete=models.SET_NULL, null=True, blank=True)
+    seen = models.IntegerField(_('seen'), default=0)
 
     class Meta:
         verbose_name = _('Product')
@@ -59,8 +61,6 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
-    def get_absolute_url(self):
-        return reverse('product_detail', kwargs={'product_slug': self.slug})
 
 
 class ProductMeta(models.Model):
@@ -114,6 +114,10 @@ class ShopProduct(models.Model):
     price = models.FloatField(_('price'))
     quantity = models.IntegerField(_('quantity'))
 
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+
     class Meta:
         verbose_name = _('ShopProduct')
         verbose_name_plural = _('ShopProducts')
@@ -121,6 +125,15 @@ class ShopProduct(models.Model):
 
     def __str__(self):
         return self.shop.name
+
+    def incrementViewCount(self):
+        self.product.seen += 1
+        self.product.save()
+        return self.product.seen
+
+
+    def get_absolute_url(self):
+        return reverse('product_detail', kwargs={'product_slug': self.product.slug , 'shop_slug': self.shop.slug})
 
 
 

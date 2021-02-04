@@ -48,16 +48,10 @@ class Brand(admin.ModelAdmin):
     list_filter = ('name',)
 
 
-@admin.register(ProductMeta)
-class ProductMeta(admin.ModelAdmin):
-    list_display = ('product', 'value', 'label')
-    search_fields = ('product', 'label')
-    list_filter = ('product',)
-
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'brand', 'category',)
+    list_display = ('name', 'brand', 'category','seen',)
     search_fields = ('name',)
     list_filter = ('brand', 'category', 'name')
     inlines = [
