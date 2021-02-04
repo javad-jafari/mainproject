@@ -9,6 +9,7 @@ from django.views import View
 from django.views.generic import RedirectView
 
 from Accounts.forms import UserThirdRegistrationForm
+from Products.models import Category
 
 User = get_user_model()
 
@@ -25,9 +26,19 @@ class SignView(LoginView):
     template_name = 'registration/login.html'
     redirect_authenticated_user = '/'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = Category.objects.all()
+        return context
 
 
 class RegisterView(View):
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = Category.objects.all()
+        return context
+
     def get(self, request):
         if request.user.is_authenticated:
             return redirect('/')

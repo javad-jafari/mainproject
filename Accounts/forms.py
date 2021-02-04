@@ -30,9 +30,10 @@ class UserThirdRegistrationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('email',)
+        fields = ('email','mobile')
         labels = {
             "email": _('ایمیل'),
+            'mobile': _("موبایل")
         }
 
     def clean_password2(self):

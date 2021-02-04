@@ -1,9 +1,8 @@
 {{ form.non_field_errors }}
 {% for field in form %}
-    <div class="form-group">
+    <div class="form-group" style="margin-top: 20px">
         <label for="exampleInputEmail1" class="">{{ field.label_tag }}</label>
-        <p>{{ field }}</p>
-        <!-- {{ field }} -->
+        {{ field }}
         {% if field.help_text %}
             <small class="form-text text-muted">{{ field.help_text|safe }}</small>
         {% endif %}
