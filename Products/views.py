@@ -2,9 +2,12 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, ListView, DetailView
+
+from Products.forms import CommentForm
 from Products.models import Product, ShopProduct, Comment, like
 from Products.models import Category
 import json
+
 
 # Create your views here.
 
@@ -25,6 +28,8 @@ class ProductDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["categories"] = Category.objects.all()
+        context["comments"] = Comment.objects.all()
+        context['form'] = CommentForm()
         return context
 
 
@@ -52,11 +57,11 @@ def like_comment(request):
     except Comment.DoesNotExist:
         return HttpResponse('bad request', status=404)
     try:
-        comment_like = like.objects.get(author=user, comment=comment)
+        comment_like = like.objects.get(user=user, comment=comment)
         comment_like.condition = data['condition']
         comment_like.save()
     except like.DoesNotExist:
-        like.objects.create(author=user, condition=data['condition'], comment=comment)
+        like.objects.create(user=user, condition=data['condition'], comment=comment)
     result = {'like_count': comment.like_count, 'dislike_count': comment.dislike_count}
 
     return HttpResponse(json.dumps(result), status=201)
@@ -67,9 +72,9 @@ def create_comment(request):
     data = json.loads(request.body)
     user = request.user
     try:
-        comment = Comment.objects.create(post_id=data['post_id'], content=data['content'], author=user)
+        comment = Comment.objects.create(product_id=data['product_id'], content=data['content'], author=user)
         result = {"comment_id": comment.id, "content": comment.content, 'dislike_count': 0, 'like_count': 0,
-                  'full_name': user.get_full_name()}
+                  'full_name': user.email}
         return HttpResponse(json.dumps(result), status=201)
     except:
         result = {"error": 'error'}

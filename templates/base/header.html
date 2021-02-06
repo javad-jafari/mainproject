@@ -67,9 +67,9 @@
                               <span class="infoicon">
                                   <i class="fa fa-user"></i>
                               </span>
-                            <p>{{ request.user.first_name }}</p>
+                            <p>{{ request.user.email }}</p>
                             <p class="description">
-                            <p><a href="#"> <i class="fa fa-user-circle"></i> حساب کابری</a></p>
+                            <p><a href="{{request.user.get_absolute_url}}"> <i class="fa fa-user-circle"></i> حساب کابری</a></p>
                             <p class="header-logout"><a href="{% url 'logout' %}"> <i class="fa fa-times-circle" aria-hidden="true"></i> خارج شدن </a></p>
                             </p>
 

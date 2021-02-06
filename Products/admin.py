@@ -61,7 +61,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('product', 'is_confirmed', 'author')
+    list_display = ('product', 'is_confirmed', 'author','like_count', 'dislike_count')
     search_fields = ('content',)
     list_filter = ('is_confirmed',)
     date_hierarchy = 'create_at'
@@ -69,6 +69,5 @@ class CommentAdmin(admin.ModelAdmin):
 
 @admin.register(like)
 class likeAdmin(admin.ModelAdmin):
-    list_display = ('product', 'user')
-    search_fields = ('product',)
-    list_filter = ('product',)
+    list_display = ( 'user',)
+

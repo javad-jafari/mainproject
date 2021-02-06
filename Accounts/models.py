@@ -66,6 +66,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name = _('user')
         verbose_name_plural = _('users')
 
+    def get_absolute_url(self):
+        return reverse('userprofile', kwargs={'user_id': self.id})
+
 
 class UserEmail(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -93,6 +96,7 @@ class Address(models.Model):
 
     def __str__(self):
         return self.city + self.street
+
 
 
 class Shop(models.Model):

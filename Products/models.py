@@ -105,6 +105,22 @@ class Comment(models.Model):
         verbose_name_plural = _("Comments")
         ordering = ['-create_at']
 
+    def __str__(self):
+        return self.product.name
+
+    @property
+    def like_count(self):
+        q = like.objects.filter(comment=self,condition=True)
+        return q.count()
+
+    @property
+    def dislike_count(self):
+        q = like.objects.filter(comment=self,condition=False)
+        return q.count()
+
+
+
+
 
 class ShopProduct(models.Model):
     shop = models.ForeignKey(Shop, related_name='Shops', related_query_name='Shops', verbose_name=_(
@@ -142,8 +158,11 @@ class like(models.Model):
                              verbose_name=_(
                                  "user"), on_delete=models.SET_NULL, null=True)
 
-    product = models.ForeignKey(Product, related_name='Productlikes', related_query_name='Productlikes', verbose_name=_(
-        "product"), on_delete=models.CASCADE)
+    comment = models.ForeignKey(Comment, related_name='comment_likes', related_query_name='comment_likes', verbose_name=_(
+        "comment"), on_delete=models.CASCADE)
+
+    condition = models.BooleanField(_('condition'))
+
 
     class Meta:
         verbose_name = _('like')
