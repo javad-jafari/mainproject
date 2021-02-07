@@ -9,5 +9,4 @@ class CommentForm(forms.ModelForm):
         model = Comment
         fields = ('content',)
         labels = {'content': _("Comment"), }
-        help_texts = {'content': _('enter your comment'), }
         widgets = {'content': forms.Textarea(attrs={'cols': 100, 'rows': 5})}

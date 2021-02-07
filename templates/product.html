@@ -88,10 +88,16 @@
             </div>
         </div>
         <!-- End Cart -->
+        <hr>
+        <div class="container" >
+            <h2 class="text-right">مشخصات محصول</h2>
+        </div>
 
-
+        <hr>
         <div class="container d-flex">
+
             {% if request.user.is_authenticated %}
+
                 <form id="comment_form">
                     {% csrf_token %}
                     {% include 'component/commentform.html' %}
@@ -181,18 +187,18 @@
                     const result = `
                                  <div class="row mt-5 mb-5" style="border: #0c5460 solid">
                     <div class="container">
-                        <h3>${ data.full_name }</h3>
-                        <p>${ data.content }</p>
+                        <h3>${data.full_name}</h3>
+                        <p>${data.content}</p>
                     </div>
 
 
                     <div>
-                        like:<span id='like_counter${ data.id }'>${ data.like_count }</span>
-                        dislike:<span id='dislike_counter${ data.id }'>${ data.dislike_count }</span>
+                        like:<span id='like_counter${data.id}'>${data.like_count}</span>
+                        dislike:<span id='dislike_counter${data.id}'>${data.dislike_count}</span>
                     </div>
                     <div class="mx-5">
-                        <button class="bg-success" onclick="likecomment(${ data.id })"></button>
-                        <button class="bg-danger" onclick="likecomment(${ data.id },false)"></button>
+                        <button class="bg-success" onclick="likecomment(${data.id})"></button>
+                        <button class="bg-danger" onclick="likecomment(${data.id},false)"></button>
                     </div>
 
 
